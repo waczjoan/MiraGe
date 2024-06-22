@@ -15,7 +15,7 @@ from scene.gaussian_model import GaussianModel
 from utils.general_utils import rot_to_quat_batch, build_rotation
 
 
-class PointsGaussianModel(GaussianModel):
+class PointsGaussianModel2d(GaussianModel):
 
     def __init__(self, sh_degree: int):
         super().__init__(sh_degree)

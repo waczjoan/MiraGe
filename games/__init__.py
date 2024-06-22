@@ -22,12 +22,15 @@ from games.mesh_splatting.scene.gaussian_mesh_model import GaussianMeshModel
 from games.multi_mesh_splatting.scene.gaussian_multi_mesh_model import GaussianMultiMeshModel
 from games.flame_splatting.scene.gaussian_flame_model import GaussianFlameModel
 from games.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
+from games.flat_splatting_2d.scene.points_gaussian_model import PointsGaussianModel2d
+from games.flat_splatting_2d.scene.flat_gaussian_model import FlatGaussianModel2d
 from games.flat_splatting.scene.flat_gaussian_model import FlatGaussianModel
 
 optimizationParamTypeCallbacks = {
     "gs": OptimizationParams,
     "gs_multi_mesh": OptimizationParamsMesh,
     "gs_flat": OptimizationParams,
+    "gs_flat2d": OptimizationParams,
     "gs_mesh": OptimizationParamsMesh,
     "gs_flame": OptimizationParamsFlame
 }
@@ -35,6 +38,7 @@ optimizationParamTypeCallbacks = {
 gaussianModel = {
     "gs": GaussianModel,
     "gs_flat": FlatGaussianModel,
+    "gs_flat2d": FlatGaussianModel2d,
     "gs_mesh": GaussianMeshModel,
     "gs_multi_mesh": GaussianMultiMeshModel,
     "gs_flame": GaussianFlameModel,
@@ -44,6 +48,7 @@ gaussianModel = {
 gaussianModelRender = {
     "gs": GaussianModel,
     "gs_flat": FlatGaussianModel,
+    "gs_flatd2d": FlatGaussianModel2d,
     "gs_mesh": GaussianMeshModel,
     "gs_multi_mesh": GaussianMultiMeshModel,
     "gs_flame": GaussianFlameModel,

@@ -39,9 +39,10 @@ def render_set(model_path, name, iteration, views, gaussians, pipeline, backgrou
     t = torch.linspace(0, 10 * torch.pi, len(views))
     v1, v2, v3 = gaussians.v1, gaussians.v2, gaussians.v3
     triangles = torch.stack([v1, v2, v3], dim=1)
+    torch.save(triangles, 'pseudomesh.pt')
 
     for idx, view in enumerate(tqdm(views, desc="Rendering progress")):
-        new_triangles = transform_hotdog(triangles, t[43])
+        new_triangles = transform_hotdog(triangles, t[0])
         rendering = render(new_triangles, view, gaussians, pipeline, background)["render"]
         gt = view.original_image[0:3, :, :]
         torchvision.utils.save_image(rendering, os.path.join(render_path, '{0:05d}'.format(idx) + ".png"))

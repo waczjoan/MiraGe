@@ -32,7 +32,8 @@ class FlatGaussianModel(GaussianModel):
     @property
     def get_scaling(self):
         self.s0 = torch.ones(self._scaling.shape[0], 1).cuda() * self.eps_s0
-        return torch.cat([self.s0, self.scaling_activation(self._scaling[:, [-2, -1]])], dim=1)
+        s = torch.cat([self.s0, self.scaling_activation(self._scaling[:, [-2, -1]])], dim=1)
+        return torch.clamp(s, min=self.eps_s0, max=1)
 
     def create_from_pcd(self, pcd: BasicPointCloud, spatial_lr_scale: float):
         self.spatial_lr_scale = spatial_lr_scale

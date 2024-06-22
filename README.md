@@ -92,8 +92,15 @@ git clone https://github.com/waczjoan/gaussian-mesh-splatting.git --recursive
 
 To install the required Python packages we used 3.7 and 3.8 python and conda v. 24.1.0
 ```shell
-conda env create --file environment.yml
-conda gaussian_splatting_mesh
+conda create -n gaussians2d python=3.8 pip
+conda activate gaussians2d
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+conda install plyfile==0.8.1 trimesh==4.0.5 tqdm -c conda-forge
+conda install cuda -c nvidia/label/cuda-11.8.0
+pip install submodules/diff-gaussian-rasterization
+pip install submodules/simple-knn
+pip install  chumpy==0.70 smplx==0.1.28 trimesh==4.4.1 lpips==0.1.4 protobuf==4.25.3
+
 ```
 Common issues:
 - Are you sure you downloaded the repository with the --recursive flag?
