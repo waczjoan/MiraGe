@@ -20,6 +20,6 @@ p = torch.load('pseudomesh.pt')
 faces = torch.range(0, p.shape[0] * 3 - 1).reshape(p.shape[0],3)
 vertice = p.reshape(p.shape[0] * 3, 3)
 
-filename = f'jump_one_gs_flat2d_rots_set_1.obj'
+filename = f'jump_one_gs_flat2d_rots_set_1_lr_rot_not_0_size_tr_20.obj'
 write_simple_obj(mesh_v=vertice.detach().cpu().numpy(), mesh_f=faces, filepath=filename)
 

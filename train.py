@@ -126,7 +126,7 @@ def training(gs_type, dataset, opt, pipe, testing_iterations, saving_iterations,
                 scene.save(iteration)
 
             # Densification
-            if (args.gs_type == "gs") or (args.gs_type == "gs_flat"):
+            if (args.gs_type == "gs") or (args.gs_type == "gs_flat") or (args.gs_type == "gs_flat2d"):
                 if iteration < opt.densify_until_iter:
                     # Keep track of max radii in image-space for pruning
                     gaussians.max_radii2D[visibility_filter] = torch.max(gaussians.max_radii2D[visibility_filter],
