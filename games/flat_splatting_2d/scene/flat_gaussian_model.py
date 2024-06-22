@@ -67,8 +67,8 @@ class FlatGaussianModel2d(GaussianModel):
 
         dist2 = torch.clamp_min(distCUDA2(torch.from_numpy(np.asarray(pcd.points)).float().cuda()), 0.0000001)
         scales = torch.log(torch.sqrt(dist2))[..., None].repeat(1, 2)
-        rots = torch.zeros((fused_point_cloud.shape[0], 4), device="cuda")
-        rots[:, 1] = 1
+        rots = torch.ones((fused_point_cloud.shape[0], 4), device="cuda")
+        #rots[:, 1] = 1
 
         opacities = inverse_sigmoid(0.1 * torch.ones((fused_point_cloud.shape[0], 1), dtype=torch.float, device="cuda"))
 
