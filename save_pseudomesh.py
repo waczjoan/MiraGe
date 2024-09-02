@@ -16,10 +16,10 @@ def write_simple_obj(mesh_v, mesh_f, filepath, verbose=False):
 
 
 
-p = torch.load('pseudomesh.pt')
+p = torch.load('output/div2k_0626_removed_bg_2Dy_2images/triangles.pt')
 faces = torch.range(0, p.shape[0] * 3 - 1).reshape(p.shape[0],3)
 vertice = p.reshape(p.shape[0] * 3, 3)
 
-filename = f'jump_one_gs_flat2d_rots_set_1_lr_rot_not_0_size_tr_20.obj'
+filename = f'output/div2k_0626_removed_bg_2Dy_2images/pseudomesh.obj'
 write_simple_obj(mesh_v=vertice.detach().cpu().numpy(), mesh_f=faces, filepath=filename)
 
