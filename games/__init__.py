@@ -18,9 +18,6 @@ from arguments_games import (
 )
 
 from scene.gaussian_model import GaussianModel
-from games.mesh_splatting.scene.gaussian_mesh_model import GaussianMeshModel
-from games.multi_mesh_splatting.scene.gaussian_multi_mesh_model import GaussianMultiMeshModel
-from games.flame_splatting.scene.gaussian_flame_model import GaussianFlameModel
 from games.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
 from games.flat_splatting_2d.scene.points_gaussian_model import PointsGaussianModel2d
 from games.flat_splatting_2d.scene.flat_gaussian_model import FlatGaussianModel2d
@@ -39,9 +36,6 @@ gaussianModel = {
     "gs": GaussianModel,
     "gs_flat": FlatGaussianModel,
     "gs_flat2d": FlatGaussianModel2d,
-    "gs_mesh": GaussianMeshModel,
-    "gs_multi_mesh": GaussianMultiMeshModel,
-    "gs_flame": GaussianFlameModel,
     "gs_points": PointsGaussianModel
 }
 
@@ -49,8 +43,5 @@ gaussianModelRender = {
     "gs": GaussianModel,
     "gs_flat": FlatGaussianModel,
     "gs_flat2d": FlatGaussianModel2d,
-    "gs_mesh": GaussianMeshModel,
-    "gs_multi_mesh": GaussianMultiMeshModel,
-    "gs_flame": GaussianFlameModel,
     "gs_points": PointsGaussianModel
 }

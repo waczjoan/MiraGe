@@ -10,3 +10,4 @@ games/flame_splatting/FLAME/model
 data/
 experiments/
 run.sh
+*.obj

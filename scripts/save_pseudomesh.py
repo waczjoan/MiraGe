@@ -98,7 +98,7 @@ if __name__ == "__main__":
     parser.add_argument("--model_path", type=str)
     parser.add_argument("--iteration", default=-1, type=int)
     parser.add_argument("--sh_degree", default=3, type=int)
-    parser.add_argument("--scale", default=1, type=int)
+    parser.add_argument("--scale", default=2, type=int)
     parser.add_argument("--save_faces", action="store_true")
     parser.add_argument("--save_vertices", action="store_true")
     args = parser.parse_args()
