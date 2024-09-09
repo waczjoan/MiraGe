@@ -17,6 +17,7 @@ from games.scenes import sceneLoadTypeCallbacks
 from scene.gaussian_model import GaussianModel
 from arguments import ModelParams
 from utils.camera_utils import cameraList_from_camInfos, camera_to_JSON
+from pathlib import Path
 
 class Scene:
 
@@ -40,27 +41,26 @@ class Scene:
         self.train_cameras = {}
         self.test_cameras = {}
 
-        if os.path.exists(os.path.join(args.source_path, "sparse")):
-            if args.gs_type == "gs_multi_mesh":
-                scene_info = sceneLoadTypeCallbacks["Colmap_Mesh"](
-                    args.source_path, args.images, args.eval, args.num_splats, args.meshes
-                )
-            else:
-                scene_info = sceneLoadTypeCallbacks["Colmap"](args.source_path, args.images, args.eval)
-        elif os.path.exists(os.path.join(args.source_path, "transforms_train.json")):
-            if args.gs_type == "gs_mesh":
-                print("Found transforms_train.json file, assuming Blender_Mesh data set!")
-                scene_info = sceneLoadTypeCallbacks["Blender_Mesh"](
-                    args.source_path, args.white_background, args.eval, args.num_splats[0]
-                )
-            elif args.gs_type == "gs_flame":
-                print("Found transforms_train.json file, assuming Flame Blender data set!")
-                scene_info = sceneLoadTypeCallbacks["Blender_FLAME"](args.source_path, args.white_background, args.eval)
-            else:
-                print("Found transforms_train.json file, assuming Blender data set!")
-                scene_info = sceneLoadTypeCallbacks["Blender"](args.source_path, args.white_background, args.eval)
+
+        if args.scene_image == "mirror":
+            image2dname = os.listdir(args.source_path)[0].split(".")[0]
+
+            scene_info = sceneLoadTypeCallbacks["Mirror"](
+                args.source_path, image2dname, args.white_background, args.eval, args.distance
+            )
+        elif args.scene_image == "image":
+            image2dname = os.listdir(args.source_path)[0].split(".")[0]
+            scene_info = sceneLoadTypeCallbacks["Image"](
+                args.source_path, image2dname, args.white_background, args.eval, args.distance
+            )
         else:
-            assert False, "Could not recognize scene type!"
+            if os.path.exists(os.path.join(args.source_path, "sparse")):
+                    scene_info = sceneLoadTypeCallbacks["Colmap"](args.source_path, args.images, args.eval)
+            elif os.path.exists(os.path.join(args.source_path, "transforms_train.json")):
+                    print("Found transforms_train.json file, assuming Blender data set!")
+                    scene_info = sceneLoadTypeCallbacks["Blender"](args.source_path, args.white_background, args.eval)
+            else:
+                assert False, "Could not recognize scene type!"
 
         if not self.loaded_iter:
             if args.gs_type == "gs_multi_mesh":
