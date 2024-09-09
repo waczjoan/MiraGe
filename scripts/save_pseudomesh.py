@@ -61,7 +61,14 @@ def write_simple_obj(mesh_v, mesh_f, filepath, verbose=False):
         print('mesh saved to: ', filepath)
 
 
-def save_pseudomesh_info(sh_degree, model_path, iteration : int, scale = 1):
+def save_pseudomesh_info(
+        sh_degree,
+        model_path,
+        iteration : int,
+        scale = 1,
+        save_faces: bool = False,
+        save_vertices: bool = False
+):
     with torch.no_grad():
         gaussians = PointsGaussianModel(sh_degree)
         model = GaussiansLoader(model_path, gaussians, load_iteration=iteration)
@@ -76,8 +83,11 @@ def save_pseudomesh_info(sh_degree, model_path, iteration : int, scale = 1):
         faces = torch.range(0, triangles.shape[0] * 3 - 1).reshape(triangles.shape[0], 3)
         vertices = triangles.reshape(triangles.shape[0] * 3, 3)
 
-        torch.save(faces, f'{pseudomesh_info_path}/faces.pt')
-        torch.save(vertices, f'{pseudomesh_info_path}/vertices.pt')
+        if save_faces:
+            torch.save(faces, f'{pseudomesh_info_path}/faces.pt')
+
+        if save_vertices:
+            torch.save(vertices, f'{pseudomesh_info_path}/vertices.pt')
         filename = f'{pseudomesh_info_path}/scale_{scale}.obj'
         write_simple_obj(mesh_v=(vertices * scale).detach().cpu().numpy(), mesh_f=faces, filepath=filename)
 
@@ -88,10 +98,20 @@ if __name__ == "__main__":
     parser.add_argument("--model_path", type=str)
     parser.add_argument("--iteration", default=-1, type=int)
     parser.add_argument("--sh_degree", default=3, type=int)
+    parser.add_argument("--scale", default=1, type=int)
+    parser.add_argument("--save_faces", action="store_true")
+    parser.add_argument("--save_vertices", action="store_true")
     args = parser.parse_args()
 
     print("Pseudomesh info " + args.model_path)
 
     model_path = args.model_path
 
-    save_pseudomesh_info(args.sh_degree, args.model_path, args.iteration)
+    save_pseudomesh_info(
+        args.sh_degree,
+        args.model_path,
+        args.iteration,
+        args.scale,
+        args.save_faces,
+        args.save_vertices
+    )
