@@ -229,13 +229,13 @@ if __name__ == "__main__":
     parser = ArgumentParser(description="Training script parameters")
     parser.add_argument('--ip', type=str, default="127.0.0.1")
     parser.add_argument('--port', type=int, default=6009)
-    parser.add_argument('--gs_type', type=str, default="gs_mesh")
-    parser.add_argument("--num_splats", nargs="+", type=int, default=[2])
-    parser.add_argument("--meshes", nargs="+", type=str, default=[])
+    parser.add_argument('--gs_type', type=str, default="gs_flat3d_image")
+    parser.add_argument('--scene_image', type=str, default="")
+    parser.add_argument("--distance", type=float, default=5.0)
     parser.add_argument('--debug_from', type=int, default=-1)
     parser.add_argument('--detect_anomaly', action='store_true', default=False)
     parser.add_argument("--test_iterations", nargs="+", type=int, default=[1_000, 2_000, 3_000, 6_000, 9_000, 10_000, 12_000, 15_000, 20_000, 25_000, 30_000])
-    parser.add_argument("--save_iterations", nargs="+", type=int, default=[30_000])
+    parser.add_argument("--save_iterations", nargs="+", type=int, default=[2_000, 30_000])
     parser.add_argument("--quiet", action="store_true")
     parser.add_argument("--checkpoint_iterations", nargs="+", type=int, default=[])
     parser.add_argument("--start_checkpoint", type=str, default=None)
@@ -243,9 +243,11 @@ if __name__ == "__main__":
 
     lp = ModelParams(parser)
     args, _ = parser.parse_known_args(sys.argv[1:])
-    lp.num_splats = args.num_splats
-    lp.meshes = args.meshes
     lp.gs_type = args.gs_type
+    lp.scene_image = args.scene_image
+    lp.distance = args.distance
+
+
 
     op = optimizationParamTypeCallbacks[args.gs_type](parser)
     pp = PipelineParams(parser)

@@ -21,7 +21,7 @@ from utils.graphics_utils import BasicPointCloud
 from scene.gaussian_model import GaussianModel
 
 
-class FlatGaussianModel2d(GaussianModel):
+class FlatGaussianModel3DImage(GaussianModel):
 
     def __init__(self, sh_degree: int):
 

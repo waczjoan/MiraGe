@@ -15,7 +15,7 @@ from scene.gaussian_model import GaussianModel
 from utils.general_utils import rot_to_quat_batch, build_rotation
 
 
-class PointsGaussianModel2d(GaussianModel):
+class PointsGaussianModelSlices(GaussianModel):
 
     def __init__(self, sh_degree: int):
         super().__init__(sh_degree)
@@ -103,4 +103,5 @@ class PointsGaussianModel2d(GaussianModel):
     @property
     def get_scaling(self):
         self.s0 = torch.ones(self._scaling.shape[0], 1).cuda() * self.eps_s0
-        return torch.cat([self.s0, self.scaling_activation(self._scaling[:, [-2, -1]])], dim=1)
+        s = torch.cat([self.s0, self.scaling_activation(self._scaling[:, [-2, -1]])], dim=1)
+        return s #torch.clamp(s, min=self.eps_s0, max=0.1)

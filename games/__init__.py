@@ -19,29 +19,38 @@ from arguments_games import (
 
 from scene.gaussian_model import GaussianModel
 from games.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
-from games.flat_splatting_2d.scene.points_gaussian_model import PointsGaussianModel2d
-from games.flat_splatting_2d.scene.flat_gaussian_model import FlatGaussianModel2d
+from games.flat_splatting_3d_images.scene.flat_gaussian_model import FlatGaussianModel3DImage
+from games.flat_splatting_2d_images.scene.flat_gaussian_model import (
+    FlatGaussianModel2DImage, FlatGaussianModel2D)
+from games.slices.scene.flat_gaussian_model import FlatGaussianModelSlices
+
 from games.flat_splatting.scene.flat_gaussian_model import FlatGaussianModel
 
 optimizationParamTypeCallbacks = {
     "gs": OptimizationParams,
-    "gs_multi_mesh": OptimizationParamsMesh,
     "gs_flat": OptimizationParams,
-    "gs_flat2d": OptimizationParams,
-    "gs_mesh": OptimizationParamsMesh,
-    "gs_flame": OptimizationParamsFlame
+    "gs_flat2D": OptimizationParams,
+    "gs_flat3d_image": OptimizationParams,
+    "gs_flat2d_image": OptimizationParams,
+    "gs_flat_slices": OptimizationParams,
 }
 
 gaussianModel = {
     "gs": GaussianModel,
     "gs_flat": FlatGaussianModel,
-    "gs_flat2d": FlatGaussianModel2d,
+    "gs_flat2D": FlatGaussianModel2D,
+    "gs_flat3d_image": FlatGaussianModel3DImage,
+    "gs_flat2d_image": FlatGaussianModel2DImage,
+    "gs_flat_slices": FlatGaussianModelSlices,
     "gs_points": PointsGaussianModel
 }
 
 gaussianModelRender = {
     "gs": GaussianModel,
     "gs_flat": FlatGaussianModel,
-    "gs_flat2d": FlatGaussianModel2d,
+    "gs_flat2D": FlatGaussianModel2D,
+    "gs_flat3d_image": FlatGaussianModel3DImage,
+    "gs_flat2d_image": FlatGaussianModel2DImage,
+    "gs_flat_slices": FlatGaussianModelSlices,
     "gs_points": PointsGaussianModel
 }
