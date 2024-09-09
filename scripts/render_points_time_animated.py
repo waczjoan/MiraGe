@@ -24,11 +24,11 @@ from argparse import ArgumentParser
 from arguments import ModelParams, PipelineParams, get_combined_args
 from games.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
 import numpy as np
-
+import matplotlib.pyplot as plt
 
 def transform_hotdog(triangles, t):
     triangles_new = triangles.clone()
-    triangles_new[:, :, 2] += 0.3 * torch.sin(triangles_new[:, :,  0] / 8 * torch.pi * t)
+    triangles_new[:, :, 2] += 0.1 * torch.sin(triangles[:, :,  0] / 4 * torch.pi + t)
     return triangles_new
 
 def hand_rotation(triangles, t):
@@ -41,7 +41,7 @@ def hand_rotation(triangles, t):
 
 def head_rotation(triangles, t):
     triangles_new = triangles.clone()
-    idx = torch.where(triangles[:, :, 0] < 0)[0]
+    idx = torch.where((triangles[:, :, 0] < 0) & (triangles[:, :, 2] < 0.5))[0]
 
     triangles_new[idx.long(), :, 1] += 0.7 * triangles[idx.long(), :,  0] ** 2 * torch.sin(t)
     return triangles_new
@@ -67,7 +67,7 @@ def do_nothing(triangles, t):
 
 
 def find_xy_from_3d_to_out_img(view, triangles):
-    n, k = 291, 300
+    n, k = view.image_width, view.image_height
     fx = fov2focal(view.FoVx, n)
     fy = fov2focal(view.FoVy, k)
     K = torch.tensor([[fx, 0, n/2], [0, fy, k/2], [0, 0, 1]])
@@ -83,22 +83,37 @@ def find_xy_from_3d_to_out_img(view, triangles):
     return x_s, y_s
 
 def render_set(model_path, name, iteration, views, gaussians, pipeline, background):
-    render_path = os.path.join(model_path, name, "ours_{}".format(iteration), "head_rotation")
+    render_path = os.path.join(model_path, name, "ours_{}".format(iteration), "transform_hotdog")
     gts_path = os.path.join(model_path, name, "ours_{}".format(iteration), "gt")
 
     makedirs(render_path, exist_ok=True)
     makedirs(gts_path, exist_ok=True)
     # t = torch.linspace(0, torch.pi, 10) #hand
-    t = torch.linspace(0, 4 * torch.pi, 10) #hand
+    t = torch.linspace(0, torch.pi, 10) #hand
+    t = torch.linspace(0, 20, 10) #pochyla
+    t = torch.linspace(0, 4 * torch.pi, 10) # hotdog
     v1, v2, v3 = gaussians.v1, gaussians.v2, gaussians.v3
     triangles = torch.stack([v1, v2, v3], dim=1)
     torch.save(triangles * 2, f'{model_path}/triangles.pt')
 
+    theta = -torch.tensor(torch.pi/8)
 
+   # y= [
+   #     [torch.cos(theta), 0, -torch.sin(theta)],
+   #     [ 0 , 1, 0],
+   #     [-torch.sin(theta), 0, torch.cos(theta)]]
+   # y = torch.tensor(y).cuda()
+
+    def rot_fun(theta):
+        y = torch.tensor([[torch.cos(theta), -torch.sin(theta), 0],
+                  [torch.sin(theta), torch.cos(theta), 0],
+                  [0, 0, 1]]).cuda()
+        return y
 
     for idx, view in enumerate(tqdm(views, desc="Rendering progress")):
         new_triangles = transform_pochyla(triangles, t[0])
-        n, k = 291, 300
+        new_triangles = new_triangles*1.4
+        n, k = 500, 500
         nn = False
         if nn:
             if idx == 0: #dla testow False
@@ -126,13 +141,39 @@ def render_set(model_path, name, iteration, views, gaussians, pipeline, backgrou
 
         #triangles[:, :, 2] +=  (pm.reshape(pm.shape[0], 1).long() - 1) * 5
         #torch.save(triangles*10, 'output/branch_forcey0rotxz_66075_white_v2/triangles.pt')
+        #idxs = torch.topk(-triangles[:, 0, 0], 1000).indices
+        idxs = torch.randint(0, triangles.shape[0], (10,))
+        follow_points = {}
+        for j in range(10):
+            follow_points[j] = {
+                'x_s':[],
+                'y_s':[]
+            }
 
-        for i in range(len(t)):
-            new_triangles = head_rotation(triangles, t[i])
+        thetas =  torch.linspace(-torch.pi/20, torch.pi/20, 10)
+        for i in range(len(thetas)):
+            #new_triangles = transform_pochyla(triangles, t[i])
+            #y = rot_fun(thetas[i])
+            #new_triangles = triangles @ y
+            new_triangles = transform_hotdog(triangles, t[i])
+            new_triangles = new_triangles * 1.2
+            #torch.save(new_triangles * 2, f'{model_path}/triangles2.pt')
+
+            x_s, y_s = find_xy_from_3d_to_out_img(view, new_triangles)
+            for j in range(10):
+                follow_points[j]['x_s'].append(x_s[idxs[j]].item())
+                follow_points[j]['y_s'].append(y_s[idxs[j]].item())
+
             rendering = render(new_triangles, view, gaussians, pipeline, background)["render"]
             gt = view.original_image[0:3, :, :]
             torchvision.utils.save_image(rendering, os.path.join(render_path, '{0:05d}'.format(idx) + f"_{i}.png"))
             #torchvision.utils.save_image(gt, os.path.join(gts_path, '{0:05d}'.format(idx) + ".png"))
+            plt.imshow(rendering.cpu().numpy().transpose((1, 2, 0)))
+                #plt.plot(xs, ys, '-', color=[1, 0, 0], linewidth=0.5)
+            for j in range(10):
+                plt.plot(follow_points[j]['x_s'], follow_points[j]['y_s'])
+            plt.axis('off')
+            plt.savefig(os.path.join(render_path, '{0:05d}'.format(idx) + f"0tarcing_{i}.png"))
 
 
 def render_sets(dataset : ModelParams, iteration : int, pipeline : PipelineParams, skip_train : bool, skip_test : bool):

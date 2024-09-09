@@ -25,10 +25,20 @@ from arguments import ModelParams, PipelineParams, get_combined_args
 from games.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
 import numpy as np
 import trimesh
-import matplotlib.pyplot as plt
+
+
+def transform_hotdog(triangles, t):
+    triangles_new = triangles.clone()
+    triangles_new[:, :, 2] += 0.2 * torch.sin(triangles[:, :,  0] / 2 * torch.pi + t)
+    return triangles_new
+
+def do_nothing(triangles, t):
+    triangles_new = triangles.clone()
+    return triangles_new
+
 
 def find_xy_from_3d_to_out_img(view, triangles):
-    n, k = view.image_width, view.image_height
+    k, n = 321, 481
     fx = fov2focal(view.FoVx, n)
     fy = fov2focal(view.FoVy, k)
     K = torch.tensor([[fx, 0, n/2], [0, fy, k/2], [0, 0, 1]])
@@ -43,23 +53,12 @@ def find_xy_from_3d_to_out_img(view, triangles):
     y_s = solutions[:,1]/solutions[:,2]
     return x_s, y_s
 
-def transform_hotdog(triangles, t):
-    triangles_new = triangles.clone()
-    triangles_new[:, :, 2] += 0.2 * torch.sin(triangles[:, :,  0] / 2 * torch.pi + t)
-    return triangles_new
-
-def do_nothing(triangles, t):
-    triangles_new = triangles.clone()
-    return triangles_new
-
-
 def render_set(model_path, name, iteration, views, gaussians, pipeline, background):
-    render_path = os.path.join(model_path, name, "ours_{}".format(iteration), "sim_objects2")
-    traj_path = os.path.join(model_path, name, "ours_{}".format(iteration), "sim_object2_traj_path")
+    render_path = os.path.join(model_path, name, "ours_{}".format(iteration), "test9")
+    gts_path = os.path.join(model_path, name, "ours_{}".format(iteration), "gt")
 
     makedirs(render_path, exist_ok=True)
-    makedirs(traj_path, exist_ok=True)
-
+    makedirs(gts_path, exist_ok=True)
     t = torch.linspace(0, 4 * torch.pi, 10)
     v1, v2, v3 = gaussians.v1, gaussians.v2, gaussians.v3
     triangles = torch.stack([v1, v2, v3], dim=1)
@@ -92,48 +91,18 @@ def render_set(model_path, name, iteration, views, gaussians, pipeline, backgrou
 
         #a = pm.shape
         #gaussians._opacity = pm1.reshape(pm1.shape[0], 1).long() * gaussians._opacity
-        objpath = f"{model_path}/sim_objects2"
-        lst = os.listdir(f"{objpath}")  # your directory path
-        lst.sort()
 
-        objpathfile = f'{objpath}/{lst[-1]}'
-        mesh_scene = trimesh.load(objpathfile, force='mesh')
-        last_triangles = torch.tensor(mesh_scene.triangles).cuda().float()
-        diff = triangles - last_triangles
-        diff_sum = diff.sum(dim=2).sum(dim=1)
+        mesh_scene = trimesh.load(f'{model_path}/objects/test9.obj', force='mesh')
+        triangles = torch.tensor(mesh_scene.triangles).cuda().float() /1.2
 
-        idxs = torch.topk(diff_sum, 10000).indices
-        follow_points = {}
-        for j in range(10):
-            follow_points[j] = {
-                'x_s': [],
-                'y_s': []
-            }
+        #for i in range(len(t)):
+        i = 0
+        new_triangles = do_nothing(triangles, t[i])
+        rendering = render(new_triangles, view, gaussians, pipeline, background)["render"]
+        gt = view.original_image[0:3, :, :]
+        torchvision.utils.save_image(rendering, os.path.join(render_path, '{0:05d}'.format(idx) + f"_{i}.png"))
+        #torchvision.utils.save_image(gt, os.path.join(gts_path, '{0:05d}'.format(idx) + ".png"))
 
-        for i in lst:
-            if "mtl" not in i:
-                objpathfile = f'{objpath}/{i}'
-
-                mesh_scene = trimesh.load(objpathfile, force='mesh')
-                new_triangles = torch.tensor(mesh_scene.triangles).cuda().float() / 1.2
-
-                x_s, y_s = find_xy_from_3d_to_out_img(view, new_triangles)
-                for j in range(10):
-                    follow_points[j]['x_s'].append(x_s[idxs[j*1000]].item())
-                    follow_points[j]['y_s'].append(y_s[idxs[j*1000]].item())
-
-                rendering = render(new_triangles, view, gaussians, pipeline, background)["render"]
-                gt = view.original_image[0:3, :, :]
-                torchvision.utils.save_image(rendering, os.path.join(render_path, '{0:05d}'.format(idx) + f"{i}.png"))
-                # torchvision.utils.save_image(gt, os.path.join(gts_path, '{0:05d}'.format(idx) + ".png"))
-                ### plt.imshow(rendering.cpu().numpy().transpose((1, 2, 0)))
-                # plt.plot(xs, ys, '-', color=[1, 0, 0], linewidth=0.5)
-
-                """for j in range(10):
-                    plt.plot(follow_points[j]['x_s'], follow_points[j]['y_s'])
-                plt.axis('off')
-                plt.savefig(os.path.join(traj_path, '{0:05d}'.format(idx) + f"{i}.png"))
-"""
 
 def render_sets(dataset : ModelParams, iteration : int, pipeline : PipelineParams, skip_train : bool, skip_test : bool):
     with torch.no_grad():
