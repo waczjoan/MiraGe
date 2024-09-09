@@ -1,8 +1,47 @@
+
+------------------------------------
+### gs_flat3d_image
+
 python scripts/train.py
---eval -s dataset_path -m model_output_path --gs_type gs_flat2d 
+--eval -s image_dir -m model_output_path --gs_type gs_flat3d_image --scene_image image --distance 1
 
 python scripts/render.py 
+-m model_output_path --scene_image image --distance 1
+
+or mirror:
+
+python scripts/train.py
+--eval -s image_dir -m model_output_path --gs_type gs_flat3d_image --scene_image mirror --distance 1
+
+python scripts/render.py 
+-m model_output_path --scene_image mirror --distance 1 
+
+python metrics.py
 -m model_output_path
+
+------------------------------------
+### gs_flat2d_image
+python scripts/train.py
+--eval -s image_dir -m model_output_path --gs_type gs_flat2d_image --scene_image mirror --distance 1
+
+python scripts/render.py 
+-m model_output_path --scene_image mirror --distance 1  --gs_type gs_flat2D 
+
+python metrics.py 
+-m model_output_path --gs_type gs_flat2D 
+------------------------------------
+### gs_flat_slices
+python scripts/train.py
+--eval -s image_dir -m model_output_path --gs_type gs_flat_slices --scene_image mirror --distance 1
+
+python scripts/render.py 
+-m model_output_path --scene_image mirror --distance 1 
+
+python metrics.py
+-m model_output_path 
+
+------------------------------------
+
 
 python scripts/save_pseudomesh.py
 --model_path model_output_path
