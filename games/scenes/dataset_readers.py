@@ -23,11 +23,11 @@ def create_transform_matrix(distance):
 def readImage(path, image2dname, white_background, eval, distance, extension=".png"):
     print("Creating Training Transform")
     train_cam_infos = CreateCamerasTransforms(
-        path, image2dname, white_background, [distance], extension
+        path, image2dname, white_background, [-distance], extension
     )
     print("Creating Test Transform")
     test_cam_infos = CreateCamerasTransforms(
-        path, image2dname, white_background, [distance], extension
+        path, image2dname, white_background, [-distance], extension
     )
 
     if not eval:
@@ -64,11 +64,11 @@ def readImage(path, image2dname, white_background, eval, distance, extension=".p
 def readMirrorImages(path, image2dname, white_background, eval, distance, extension=".png"):
     print("Creating Training Transforms")
     train_cam_infos = CreateCamerasTransforms(
-        path, image2dname, white_background, [distance, -distance], extension
+        path, image2dname, white_background, [-distance, distance], extension
     )
     print("Creating Test Transforms")
     test_cam_infos = CreateCamerasTransforms(
-        path, image2dname, white_background, [distance, -distance], extension
+        path, image2dname, white_background, [-distance, distance], extension
     )
 
     if not eval:
