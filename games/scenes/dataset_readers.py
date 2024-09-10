@@ -7,6 +7,7 @@ import numpy as np
 from PIL import Image, ImageOps
 from utils.graphics_utils import focal2fov, fov2focal
 from pathlib import Path
+import math
 
 
 camera_angle_x = 0.6911112070083618
@@ -40,10 +41,14 @@ def readImage(path, image2dname, white_background, eval, distance, extension=".p
     if not os.path.exists(ply_path):
         # Since this data set has no colmap data, we start with random points
         num_pts = 100_000
+        camera = train_cam_infos[0]
+        top = distance * math.tan(camera.FovY * 0.5)
+        aspect_ratio = camera.width / camera.height
+        right = top * aspect_ratio
         print(f"Generating random point cloud ({num_pts})...")
 
         # We create random points inside the bounds of the synthetic Blender scenes
-        xyz = np.random.random((num_pts, 3)) * 2.6 - 1.3
+        xyz = np.random.uniform(low=[-right, 0, -top], high=[right, 0, top], size=(num_pts, 3))
         shs = np.random.random((num_pts, 3)) / 255.0
         pcd = BasicPointCloud(points=xyz, colors=SH2RGB(shs), normals=np.zeros((num_pts, 3)))
 
@@ -81,10 +86,14 @@ def readMirrorImages(path, image2dname, white_background, eval, distance, extens
     if not os.path.exists(ply_path):
         # Since this data set has no colmap data, we start with random points
         num_pts = 100_000
+        camera = train_cam_infos[0]
+        top = distance * math.tan(camera.FovY * 0.5)
+        aspect_ratio = camera.width / camera.height
+        right = top * aspect_ratio
         print(f"Generating random point cloud ({num_pts})...")
 
         # We create random points inside the bounds of the synthetic Blender scenes
-        xyz = np.random.random((num_pts, 3)) * 2.6 - 1.3
+        xyz = np.random.uniform(low=[-right, 0, -top], high=[right, 0, top], size=(num_pts, 3))
         shs = np.random.random((num_pts, 3)) / 255.0
         pcd = BasicPointCloud(points=xyz, colors=SH2RGB(shs), normals=np.zeros((num_pts, 3)))
 
