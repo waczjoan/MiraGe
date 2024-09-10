@@ -43,7 +43,7 @@ class Scene:
 
 
         if args.scene_image == "mirror":
-            image2dname = [x for x in os.listdir(args.source_path) if "_mirror" not in x][0].split(".")[0]
+            image2dname = [x for x in os.listdir(args.source_path) if ("_mirror" not in x) and (x[-3:] == 'png' )][0].split(".")[0]
 
             scene_info = sceneLoadTypeCallbacks["Mirror"](
                 args.source_path, image2dname, args.white_background, args.eval, args.distance
