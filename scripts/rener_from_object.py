@@ -81,10 +81,14 @@ if __name__ == "__main__":
     parser.add_argument('--gs_type', type=str, default="gs_points")
     parser.add_argument("--scale", default=2, type=float)
     parser.add_argument("--object_path", default="", type=str)
+    parser.add_argument('--scene_image', type=str, default="")
+    parser.add_argument("--distance", type=float, default=5.0)
 
 
     args = get_combined_args(parser)
     model.gs_type = args.gs_type
+    model.scene_image = args.scene_image
+    model.distance = args.distance
     print("Rendering " + args.model_path)
 
     # Initialize system state (RNG)
