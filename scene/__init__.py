@@ -50,6 +50,7 @@ class Scene:
             )
         elif args.scene_image == "image":
             image2dname = [x for x in os.listdir(args.source_path) if ("_mirror" not in x) and (x[-3:] == 'png' )][0].split(".")[0]
+
             scene_info = sceneLoadTypeCallbacks["Image"](
                 args.source_path, image2dname, args.white_background, args.eval, args.distance
             )
