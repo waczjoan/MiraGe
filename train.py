@@ -232,6 +232,7 @@ if __name__ == "__main__":
     parser.add_argument('--gs_type', type=str, default="gs_flat3d_image")
     parser.add_argument('--scene_image', type=str, default="")
     parser.add_argument("--distance", type=float, default=5.0)
+    parser.add_argument("--num_pts", type=int, default=100_000)
     parser.add_argument('--debug_from', type=int, default=-1)
     parser.add_argument('--detect_anomaly', action='store_true', default=False)
     parser.add_argument("--test_iterations", nargs="+", type=int, default=[1_000, 2_000, 3_000, 6_000, 9_000, 10_000, 12_000, 15_000, 20_000, 25_000, 30_000])
@@ -246,7 +247,7 @@ if __name__ == "__main__":
     lp.gs_type = args.gs_type
     lp.scene_image = args.scene_image
     lp.distance = args.distance
-
+    lp.num_pts = args.num_pts
 
 
     op = optimizationParamTypeCallbacks[args.gs_type](parser)

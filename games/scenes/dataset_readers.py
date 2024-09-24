@@ -21,7 +21,7 @@ def create_transform_matrix(distance):
     ]
     return transform_matrix
 
-def readImage(path, image2dname, white_background, eval, distance, extension=".png"):
+def readImage(path, image2dname, white_background, eval, distance, num_pts, extension=".png"):
     print("Creating Training Transform")
     train_cam_infos = CreateCamerasTransforms(
         path, image2dname, white_background, [-distance], extension
@@ -40,7 +40,6 @@ def readImage(path, image2dname, white_background, eval, distance, extension=".p
     ply_path = os.path.join(path, "points3d.ply")
     if not os.path.exists(ply_path):
         # Since this data set has no colmap data, we start with random points
-        num_pts = 100_000
         camera = train_cam_infos[0]
         top = distance * math.tan(camera.FovY * 0.5)
         aspect_ratio = camera.width / camera.height
@@ -66,7 +65,7 @@ def readImage(path, image2dname, white_background, eval, distance, extension=".p
     return scene_info
 
 
-def readMirrorImages(path, image2dname, white_background, eval, distance, extension=".png"):
+def readMirrorImages(path, image2dname, white_background, eval, distance, num_pts, extension=".png"):
     print("Creating Training Transforms")
     train_cam_infos = CreateCamerasTransforms(
         path, image2dname, white_background, [-distance, distance], extension
@@ -85,7 +84,6 @@ def readMirrorImages(path, image2dname, white_background, eval, distance, extens
     ply_path = os.path.join(path, "points3d.ply")
     if not os.path.exists(ply_path):
         # Since this data set has no colmap data, we start with random points
-        num_pts = 100_000
         camera = train_cam_infos[0]
         top = distance * math.tan(camera.FovY * 0.5)
         aspect_ratio = camera.width / camera.height

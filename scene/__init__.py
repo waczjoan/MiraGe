@@ -30,7 +30,7 @@ class Scene:
         self.model_path = args.model_path
         self.loaded_iter = None
         self.gaussians = gaussians
-
+        print("Distance: {}".format(args.distance))
         if load_iteration:
             if load_iteration == -1:
                 self.loaded_iter = searchForMaxIteration(os.path.join(self.model_path, "point_cloud"))
@@ -46,20 +46,20 @@ class Scene:
             image2dname = [x for x in os.listdir(args.source_path) if ("_mirror" not in x) and (x[-3:] == 'png' )][0].split(".")[0]
 
             scene_info = sceneLoadTypeCallbacks["Mirror"](
-                args.source_path, image2dname, args.white_background, args.eval, args.distance
+                args.source_path, image2dname, args.white_background, args.eval, args.distance, args.num_pts
             )
         elif args.scene_image == "image":
             image2dname = [x for x in os.listdir(args.source_path) if ("_mirror" not in x) and (x[-3:] == 'png' )][0].split(".")[0]
 
             scene_info = sceneLoadTypeCallbacks["Image"](
-                args.source_path, image2dname, args.white_background, args.eval, args.distance
+                args.source_path, image2dname, args.white_background, args.eval, args.distance, args.num_pts
             )
         else:
             if os.path.exists(os.path.join(args.source_path, "sparse")):
                     scene_info = sceneLoadTypeCallbacks["Colmap"](args.source_path, args.images, args.eval)
             elif os.path.exists(os.path.join(args.source_path, "transforms_train.json")):
                     print("Found transforms_train.json file, assuming Blender data set!")
-                    scene_info = sceneLoadTypeCallbacks["Blender"](args.source_path, args.white_background, args.eval)
+                    scene_info = sceneLoadTypeCallbacks["Blender"](args.source_path, args.white_background, args.eval, args.num_pts)
             else:
                 assert False, "Could not recognize scene type!"
 
