@@ -64,6 +64,7 @@ if __name__ == "__main__":
     parser.add_argument("--iteration", default=-1, type=int)
     parser.add_argument('--scene_image', type=str, default="")
     parser.add_argument("--distance", type=float, default=5.0)
+    parser.add_argument("--num_pts", type=int, default=100_000)
     parser.add_argument("--skip_train", action="store_true")
     parser.add_argument("--skip_test", action="store_true")
     parser.add_argument('--gs_type', type=str, default="gs_flat")
@@ -73,6 +74,7 @@ if __name__ == "__main__":
     model.gs_type = args.gs_type
     model.scene_image = args.scene_image
     model.distance = args.distance
+    model.num_pts = args.num_pts
 
     print("Rendering " + args.model_path)
 
