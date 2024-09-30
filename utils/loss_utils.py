@@ -13,7 +13,8 @@ import torch
 import torch.nn.functional as F
 from torch.autograd import Variable
 from math import exp
-
+from pytorch_msssim import ms_ssim
+ 
 def l1_loss(network_output, gt):
     return torch.abs((network_output - gt)).mean()
 
@@ -29,6 +30,9 @@ def create_window(window_size, channel):
     _2D_window = _1D_window.mm(_1D_window.t()).float().unsqueeze(0).unsqueeze(0)
     window = Variable(_2D_window.expand(channel, 1, window_size, window_size).contiguous())
     return window
+
+def xdssim(img1, img2, window_size=11, size_average=True):
+    return ms_ssim(img1, img2, data_range=1, size_average=size_average)
 
 def ssim(img1, img2, window_size=11, size_average=True):
     channel = img1.size(-3)

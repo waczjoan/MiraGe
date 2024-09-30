@@ -27,6 +27,8 @@ from tqdm import tqdm
 from utils.image_utils import psnr
 from argparse import ArgumentParser, Namespace
 from arguments import ModelParams, PipelineParams
+import json
+import time
 
 try:
     from torch.utils.tensorboard import SummaryWriter
@@ -263,13 +265,26 @@ if __name__ == "__main__":
 
     # Start GUI server, configure and run training
     # network_gui.init(args.ip, args.port)
+
     torch.autograd.set_detect_anomaly(args.detect_anomaly)
+
+    time_start = time.process_time()
+    init_time = time.time()
+
     training(
         args.gs_type,
         lp.extract(args), op.extract(args), pp.extract(args),
         args.test_iterations, args.save_iterations, args.checkpoint_iterations,
         args.start_checkpoint, args.debug_from, args.save_xyz
     )
+
+    time_elapsed = time.process_time() - time_start
+    time_dict = {}
+    time_dict["time"] = time_elapsed
+    time_dict["elapsed"] = time.time() - init_time
+
+    with open(args.model_path + f"/time.json", 'w') as fp:
+        json.dump(time_dict, fp, indent=True)
 
     # All done
     print("\nTraining complete.")

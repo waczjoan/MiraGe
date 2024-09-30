@@ -14,7 +14,7 @@ import os
 from PIL import Image
 import torch
 import torchvision.transforms.functional as tf
-from utils.loss_utils import ssim
+from utils.loss_utils import xdssim
 from lpipsPyTorch import lpips
 import json
 from tqdm import tqdm
@@ -26,6 +26,8 @@ def readImages(renders_dir, gt_dir):
     gts = []
     image_names = []
     for fname in os.listdir(renders_dir):
+        if (fname != '00000.png'):
+            continue
         render = Image.open(renders_dir / fname)
         gt = Image.open(gt_dir / fname)
         renders.append(tf.to_tensor(render).unsqueeze(0)[:, :3, :, :].cuda())
@@ -69,7 +71,7 @@ def evaluate(gs_type, model_paths):
                 lpipss = []
 
                 for idx in tqdm(range(len(renders)), desc="Metric evaluation progress"):
-                    ssims.append(ssim(renders[idx], gts[idx]))
+                    ssims.append(xdssim(renders[idx], gts[idx]))
                     psnrs.append(psnr(renders[idx], gts[idx]))
                     lpipss.append(lpips(renders[idx], gts[idx], net_type='vgg'))
 
