@@ -1,3 +1,8 @@
+<p align="center">
+<img src="./docs/images/teaser_github.gif"/>
+</p>
+
+
 # MiraGe: Editable 2D Images using Gaussian Splatting
 Joanna Waczyńska, Tomasz Szczepanik, Piotr Borycki, Sławomir Tadeja, Thomas Bohné, Przemysław Spurek
 
