@@ -19,7 +19,7 @@ from utils.sh_utils import RGB2SH
 from simple_knn._C import distCUDA2
 from utils.graphics_utils import BasicPointCloud
 from scene.gaussian_model import GaussianModel
-from games.flat_splatting.scene.flat_gaussian_model import FlatGaussianModel
+from models.flat_splatting.scene.flat_gaussian_model import FlatGaussianModel
 
 class FlatGaussianModel2D(FlatGaussianModel):
 

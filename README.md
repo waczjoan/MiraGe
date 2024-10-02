@@ -101,7 +101,7 @@ reflection.
 increasing the camera distance can naturally expand the apparent size of background elements, making it easier to represent them as larger objects without additional modeling complexity. While this feature is beneficial, it is not strictly necessary for most applications.
 
   ```shell
-python train.py -s image_dir -m model_output_path --gs_type amorphous --camera mirror 
+python train.py -s image_dir -m model_output_path --gs_type amorphous --camera mirror
   ```
 
   ```shell

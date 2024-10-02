@@ -16,7 +16,7 @@ from scene.dataset_readers import (
     readNerfSyntheticInfo,
 )
 
-from games.scenes.dataset_readers import (
+from models.scenes.dataset_readers import (
     readMirrorImages,
     readImage
 )
