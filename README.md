@@ -65,7 +65,9 @@ Common issues:
 
 # Dataset
 
-Feel free. You can choose whatever 2D image (`.png`).
+Feel free. You can choose whatever 2D image you want (`.png`).
+
+Under the  [LINK](https://ujchmura-my.sharepoint.com/:f:/g/personal/joanna_waczynska_doctoral_uj_edu_pl/EmeuuK0PMzNJtXCFDglxGYwBISkbL-UyeVSQcfIwd-ASHA?e=RmSsYs) please find pre-trained model and cat image (there is already flipped cat image in `data/cat`).
 
 
 # Tutorial
