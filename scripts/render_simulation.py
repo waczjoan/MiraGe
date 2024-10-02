@@ -12,8 +12,6 @@
 #
 
 import torch
-from fontTools.merge.util import first
-
 from scene import Scene
 import os
 from tqdm import tqdm
@@ -95,7 +93,7 @@ def render_set(
                 new_triangles = torch.tensor(mesh_scene.triangles).cuda().float() / scale
 
                 rendering = render(new_triangles, view, gaussians, pipeline, background)["render"]
-                torchvision.utils.save_image(rendering, os.path.join(render_path, '{0:05d}'.format(idx) + f"{object_file}.png"))
+                torchvision.utils.save_image(rendering, os.path.join(render_path, '{0:05d}'.format(idx) + f"{object_file.split('.')[0]}.png"))
 
                 if save_trajectory:
                     x_s, y_s = find_xy_from_3d_to_out_img(view, new_triangles)
@@ -148,14 +146,14 @@ if __name__ == "__main__":
     model = ModelParams(parser, sentinel=True)
     pipeline = PipelineParams(parser)
     parser.add_argument("--iteration", default=-1, type=int)
-    parser.add_argument("--skip_train", action="store_true")
-    parser.add_argument("--skip_test", action="store_false")
+    parser.add_argument("--skip_train", action="store_false")
+    parser.add_argument("--skip_test", action="store_true")
     parser.add_argument("--save_trajectory", action="store_true")
     parser.add_argument("--quiet", action="store_true")
     parser.add_argument('--gs_type', type=str, default="gs_points")
     parser.add_argument("--scale", default=2, type=float)
     parser.add_argument('--camera', type=str, default="mirror")
-    parser.add_argument("--distance", type=float, default=5.0)
+    parser.add_argument("--distance", type=float, default=1.0)
     parser.add_argument("--simulation_path", default="", type=str)
     parser.add_argument("--num_pts", type=int, default=100_000)
 
@@ -163,7 +161,6 @@ if __name__ == "__main__":
 
     args = get_combined_args(parser)
     model.gs_type = args.gs_type
-    model.scene_image = args.scene_image
     model.distance = args.distance
     model.num_pts = args.num_pts
     model.camera = args.camera
