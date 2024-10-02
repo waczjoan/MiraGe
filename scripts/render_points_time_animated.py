@@ -24,9 +24,9 @@ from arguments import ModelParams, PipelineParams, get_combined_args
 from models.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
 
 
-def transform_sinus(triangles, t):
+def transform_example(triangles, t):
     triangles_new = triangles.clone()
-    triangles_new[:, :, 2] += 0.1 * torch.sin(triangles[:, :,  0] / 4 * torch.pi + t)
+    triangles_new[:, :, 1] -=  triangles[:, :,  0] * torch.sin(t) * 0.3
     return triangles_new
 
 
@@ -36,16 +36,16 @@ def do_nothing(triangles, t):
 
 
 def render_set(model_path, name, iteration, views, gaussians, pipeline, background):
-    render_path = os.path.join(model_path, name, "ours_{}".format(iteration), "transform_sinus")
+    render_path = os.path.join(model_path, name, "ours_{}".format(iteration), "renders_transform")
 
     makedirs(render_path, exist_ok=True)
-    thetas = torch.linspace(0, 4 * torch.pi, 10) # hotdog
+    thetas = torch.linspace(0, 2 * torch.pi, 10) # hotdog
     v1, v2, v3 = gaussians.v1, gaussians.v2, gaussians.v3
     triangles = torch.stack([v1, v2, v3], dim=1)
 
     for idx, view in enumerate(tqdm(views, desc="Rendering progress")):
         for theta_idx in range(len(thetas)):
-            new_triangles = transform_sinus(triangles, thetas[theta_idx])
+            new_triangles = transform_example(triangles, thetas[theta_idx])
             rendering = render(new_triangles, view, gaussians, pipeline, background)["render"]
             output_file_path = os.path.join(render_path, '{0:05d}'.format(idx) + f"_{theta_idx}.png")
             torchvision.utils.save_image(
@@ -78,13 +78,14 @@ if __name__ == "__main__":
     model = ModelParams(parser, sentinel=True)
     pipeline = PipelineParams(parser)
     parser.add_argument("--iteration", default=-1, type=int)
-    parser.add_argument("--skip_train", action="store_true")
+    parser.add_argument("--skip_train", action="store_false")
     parser.add_argument("--skip_test", action="store_true")
     parser.add_argument("--quiet", action="store_true")
     parser.add_argument('--gs_type', type=str, default="gs_points")
-    parser.add_argument("--sh_degree", default=3, type=int)
     parser.add_argument("--num_pts", type=int, default=100_000)
     parser.add_argument('--camera', type=str, default="mirror")
+    parser.add_argument("--distance", type=float, default=1.0)
+
 
 
 
@@ -92,6 +93,7 @@ if __name__ == "__main__":
     model.gs_type = args.gs_type
     model.num_pts = args.num_pts
     model.camera = args.camera
+    model.distance = args.distance
 
     print("Rendering " + args.model_path)
 

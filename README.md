@@ -100,6 +100,7 @@ reflection.
 `distance`: default 1
 increasing the camera distance can naturally expand the apparent size of background elements, making it easier to represent them as larger objects without additional modeling complexity. While this feature is beneficial, it is not strictly necessary for most applications.
 
+It should be around 2 minutes:
   ```shell
 python train.py -s image_dir -m model_output_path --gs_type amorphous --camera mirror
   ```
@@ -138,7 +139,7 @@ if `gs_type=2d` was used, please use:
 python scripts/render.py -m model_output_path --gs_type 2d 
 ```
 
-Then, let's calculate  metrics (it takes around 3 minutes):
+Then, let's calculate  metrics:
 ```shell
 python metrics.py -m output/hotdog_gs_flat --gs_type gs_flat
 ```
@@ -158,33 +159,6 @@ In `output/cat_mirage` you should find:
 |---...
 ```
 
-Since we would like to use parametrized Gaussians Splatting let's check renders after parametrization, use `gs_points` flag:
-```shell
-  scripts/render.py -m output/hotdog_gs_flat --gs_type gs_points
-```
-
-Then, let's calculate  metrics (it takes around 3 minutes):
-```shell
-python metrics.py -m output/hotdog_gs_flat --gs_type gs_points
-```
-In `output/hotdog_gs_flat` you should find: 
-```
-<MiraGe>
-|---output
-|   |---<cat_mirage>
-|   |   |---point_cloud
-|   |   |---cfg_args
-|   |   |---test
-|   |   |---<ours_iter>
-|   |   |   |---renders_gs_flat
-|   |   |   |---renders_gs_points
-|   |   |---results_gs_flat.json
-|   |   |---results_gs_points.json
-|   |   |---...
-|---metrics.py
-|---...
-```
-Please note, `results_gs_flat` and `results_gs_points` are differ slightly, this is due to numerical calculations.
 
 5. Modification / Wavy:
 

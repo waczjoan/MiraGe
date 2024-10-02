@@ -72,7 +72,7 @@ def readMirrorImages(path, image2dname, white_background, eval, distance, num_pt
     )
     print("Creating Test Transforms")
     test_cam_infos = CreateCamerasTransforms(
-        path, image2dname, white_background, [-distance, distance], extension
+        path, image2dname, white_background, [-distance], extension
     )
 
     if not eval:
