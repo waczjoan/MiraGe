@@ -159,14 +159,19 @@ In `output/cat_mirage` you should find:
 |---...
 ```
 
+you should get:
 
-5. Modification / Wavy:
+<p>
+<img src="./docs/cat_output_images/renders_gs_flat/00000.png" height="250"/>
+</p>
+
+5. Modification:
 
 Simply run:
 ```shell
   scripts/render_points_time_animated.py -m output/cat_mirage
 ```
-Please find renders in `time_animated` directory: 
+Please find renders in `renders_transform` directory: 
 ```
 <MiraGe>
 |---output
@@ -176,14 +181,13 @@ Please find renders in `time_animated` directory:
 |   |   |---test
 |   |   |---<ours_iter>
 |   |   |   |---renders_gs_flat
-|   |   |   |---renders_gs_points
-|   |   |   |---time_animated_gs_points
+|   |   |   |---renders_transform
 |   |   |---...
 |---metrics.py
 |---...
 ```
 
-5. User modification:
+6. User modification:
 
 First save pseudomesh (triangle soup):
 
@@ -192,7 +196,12 @@ python scripts/save_pseudomesh.py --model_path model_output_path
 ```
 
 then use Blender or different tool to manipulate faces (triangles).
-Save `.obj` file. 
+Save `.obj` file.
+
+If you create more objects (for example simulation), you to render please use:
+```shell
+python scripts/render_simulation.py  -m model_output_path --simulation_path simulation_path --save_trajectory
+```
 
 To render user-driven modification use: 
 
@@ -200,11 +209,42 @@ To render user-driven modification use:
 python scripts/render_from_object.py  -m model_output_path --object_path object_path.obj
 ```
 
-If you create more objects (for example simulation), you to render please use:
-```shell
-python scripts/render_simulation.py  -m model_output_path --simulation_path simulation_path --save_trajectory
+We offer a pre-trained cat model, designed "for fun," along with a Blender (.blend) file. 
+This file applies a basic lattice modifier to generate the objects stored in the `output/sim_objects` directory. 
+Additionally, the triangle soup data for the cat is available in `output/pseudomesh_info`.
+
+Please find renders in `sim_objects` and `sim_objects_traj_path` directory:
+```
+<MiraGe>
+|---output
+|   |---<cat_mirage>
+|   |   |---point_cloud
+|   |   |---cfg_args
+|   |   |---test
+|   |   |---<ours_iter>
+|   |   |   |---renders_gs_flat
+|   |   |   |---sim_objects
+|   |   |   |---sim_objects_traj_path
+|   |   |---...
+|---metrics.py
+|---...
 ```
 
+In `output/testsim_objects_traj_path`:
+<p>
+<img src="./docs/cat_output_images/sim_objects_traj_path/cat_.gif" height="250"/>
+</p>
+
+In  `output/object/example_modification.obj` please use 
+
+```shell
+python scripts/render_from_object.py -m output/cat_mirage --object_path output/object/example_modification.obj
+```
+
+In `output/test/example_modification`:
+<p>
+<img src="./docs/cat_output_images/example_modification/00000.png" height="250"/>
+</p>
 
 # In nutshell:
 
