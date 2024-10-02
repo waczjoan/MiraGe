@@ -1,3 +1,26 @@
+# MiraGe: Editable 2D Images using Gaussian Splatting
+Joanna Waczyńska, Tomasz Szczepanik, Piotr Borycki, Sławomir Tadeja, Thomas Bohné, Przemysław Spurek
+
+Implicit Neural Representations (INRs) approximate 
+discrete data through continuous functions and are 
+commonly used for encoding 2D images. Traditional image-based 
+INRs employ neural networks to map pixel coordinates to RGB values, 
+capturing shapes, colors, and textures within the network’s weights. 
+Recently, GaussianImage has been proposed as an alternative,
+using Gaussian functions instead of neural networks to achieve 
+comparable quality and compression. Such a solution obtains a
+quality and compression ratio similar to classical INR models 
+but does not allow image modification. In contrast, our work introduces a novel method, \our{}, which uses mirror reflections to perceive 2D images in 3D space and employs flat-controlled Gaussians for precise 2D image editing. Our approach improves the rendering quality and allows realistic image modifications, including human-inspired perception of photos in the 3D world. Thanks to modeling images in 3D space, we obtain the illusion of 3D-based modification in 2D images. We also show that our Gaussian representation can be easily combined with a physics engine to produce physics-based modification of 2D images. 
+Consequently, MiraGe allows for better quality than the standard approach and natural modification of 2D images.
+
+</br>
+<img src="./docs/gifs/blanket.gif" height="250" />
+</br>
+
+<p>
+<img src="./docs/gifs/human_ball.gif" height="250"/>
+<img src="./docs/gifs/human_smile.gif" height="250"/>
+</p>
 
 # Installation
 
@@ -25,7 +48,7 @@ git clone https://github.com/waczjoan/MiraGe.git --recursive
 ### Environment
 #### Local Setup
 
-To install the required Python packages we used 3.7 and 3.8 python and conda v. 24.5.0
+To install the required Python packages we used 3.8 python and conda v. 24.5.0
 ```shell
 conda env create --file environment.yml
 conda mirage
@@ -36,6 +59,8 @@ Common issues:
 - Please note that this process assumes that you have CUDA SDK **11** installed, not **12**. if you encounter a problem please refer to  [3DGS](https://github.com/graphdeco-inria/gaussian-splatting) repository.
 
 # Dataset
+
+Feel free. You can choose whatever 2D image (`.png`).
 
 
 # Tutorial
@@ -60,7 +85,7 @@ behavior of Gaussians. Three distinct settings for Gaussian movement were explor
 - `gs_type`:
     - `amorphous`: the first allows Gaussians to move freely in 3D space,
     - `2d`: the second restricts their movement to align parallel to the XZ plane
-    - `graphite` the third confines all Gaussians to the XZ plane, effectively creating a 3D representation
+    - `graphite`: the third confines all Gaussians to the XZ plane, effectively creating a 3D representation
 
 - `camera`: 
     - `one`: baseline. use only one camera.
@@ -187,15 +212,8 @@ First save pseudomesh (triangle soup):
 python scripts/save_pseudomesh.py --model_path model_output_path
 ```
 
-then use Blender or different tool to manipulate.
+then use Blender or different tool to manipulate faces (triangles).
 Save `.obj` file. 
-
-To render user-driven modification use: 
-
-```shell
-python scripts/render_from_object.py  -m model_output_path --object_path object_path.obj
-```
-
 
 To render user-driven modification use: 
 
