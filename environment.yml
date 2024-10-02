@@ -1,4 +1,4 @@
-name: gaussian_splatting_mesh
+name: mirage
 channels:
   - pytorch
   - conda-forge

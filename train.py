@@ -16,7 +16,7 @@ from utils.loss_utils import l1_loss, ssim
 from renderer.gaussian_renderer import render, network_gui
 import sys
 from scene import Scene
-from games import (
+from models import (
     optimizationParamTypeCallbacks,
     gaussianModel
 )
@@ -128,7 +128,7 @@ def training(gs_type, dataset, opt, pipe, testing_iterations, saving_iterations,
                 scene.save(iteration)
 
             # Densification
-            if args.gs_type in ["gs", "gs_flat", "gs_flat2d",  "gs_flat2d_image", "gs_flat3d_image", "gs_flat_slices"]:
+            if args.gs_type in ["gs", "gs_flat", "gs_flat2d",  "2d", "amorphous", "graphite"]:
                 if iteration < opt.densify_until_iter:
                     # Keep track of max radii in image-space for pruning
                     gaussians.max_radii2D[visibility_filter] = torch.max(gaussians.max_radii2D[visibility_filter],
@@ -231,9 +231,9 @@ if __name__ == "__main__":
     parser = ArgumentParser(description="Training script parameters")
     parser.add_argument('--ip', type=str, default="127.0.0.1")
     parser.add_argument('--port', type=int, default=6009)
-    parser.add_argument('--gs_type', type=str, default="gs_flat3d_image")
-    parser.add_argument('--scene_image', type=str, default="")
-    parser.add_argument("--distance", type=float, default=5.0)
+    parser.add_argument('--gs_type', type=str, default="amorphous")
+    parser.add_argument('--camera', type=str, default="mirror")
+    parser.add_argument("--distance", type=float, default=1.0)
     parser.add_argument("--num_pts", type=int, default=100_000)
     parser.add_argument('--debug_from', type=int, default=-1)
     parser.add_argument('--detect_anomaly', action='store_true', default=False)
@@ -247,7 +247,7 @@ if __name__ == "__main__":
     lp = ModelParams(parser)
     args, _ = parser.parse_known_args(sys.argv[1:])
     lp.gs_type = args.gs_type
-    lp.scene_image = args.scene_image
+    lp.camera = args.camera
     lp.distance = args.distance
     lp.num_pts = args.num_pts
 

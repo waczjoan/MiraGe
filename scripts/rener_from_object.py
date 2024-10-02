@@ -21,7 +21,7 @@ import torchvision
 from utils.general_utils import safe_state
 from argparse import ArgumentParser
 from arguments import ModelParams, PipelineParams, get_combined_args
-from games.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
+from models.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
 import trimesh
 
 
@@ -81,14 +81,18 @@ if __name__ == "__main__":
     parser.add_argument('--gs_type', type=str, default="gs_points")
     parser.add_argument("--scale", default=2, type=float)
     parser.add_argument("--object_path", default="", type=str)
-    parser.add_argument('--scene_image', type=str, default="")
-    parser.add_argument("--distance", type=float, default=5.0)
+    parser.add_argument('--camera', type=str, default="mirror")
+    parser.add_argument("--distance", type=float, default=1.0)
+    parser.add_argument("--num_pts", type=int, default=100_000)
+
 
 
     args = get_combined_args(parser)
     model.gs_type = args.gs_type
-    model.scene_image = args.scene_image
+    model.camera = args.camera
     model.distance = args.distance
+    model.num_pts = args.num_pts
+
     print("Rendering " + args.model_path)
 
     # Initialize system state (RNG)

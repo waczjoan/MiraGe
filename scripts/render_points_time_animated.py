@@ -21,7 +21,7 @@ import torchvision
 from utils.general_utils import safe_state
 from argparse import ArgumentParser
 from arguments import ModelParams, PipelineParams, get_combined_args
-from games.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
+from models.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
 
 
 def transform_sinus(triangles, t):
@@ -83,10 +83,16 @@ if __name__ == "__main__":
     parser.add_argument("--quiet", action="store_true")
     parser.add_argument('--gs_type', type=str, default="gs_points")
     parser.add_argument("--sh_degree", default=3, type=int)
+    parser.add_argument("--num_pts", type=int, default=100_000)
+    parser.add_argument('--camera', type=str, default="mirror")
+
+
 
     args = get_combined_args(parser)
     model.gs_type = args.gs_type
-    model.num_splats = args.num_splats
+    model.num_pts = args.num_pts
+    model.camera = args.camera
+
     print("Rendering " + args.model_path)
 
     # Initialize system state (RNG)

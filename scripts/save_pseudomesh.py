@@ -16,7 +16,7 @@ sys.path.append("games_submodule")
 
 import torch
 from os import makedirs
-from games.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
+from models.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
 from utils.system_utils import searchForMaxIteration
 from scene.gaussian_model import GaussianModel
 from argparse import ArgumentParser
@@ -101,7 +101,9 @@ if __name__ == "__main__":
     parser.add_argument("--scale", default=2, type=int)
     parser.add_argument("--save_faces", action="store_true")
     parser.add_argument("--save_vertices", action="store_true")
+
     args = parser.parse_args()
+
 
     print("Pseudomesh info " + args.model_path)
 

@@ -13,7 +13,7 @@ import os
 import random
 import json
 from utils.system_utils import searchForMaxIteration
-from games.scenes import sceneLoadTypeCallbacks
+from models.scenes import sceneLoadTypeCallbacks
 from scene.gaussian_model import GaussianModel
 from arguments import ModelParams
 from utils.camera_utils import cameraList_from_camInfos, camera_to_JSON
@@ -42,13 +42,13 @@ class Scene:
         self.test_cameras = {}
 
 
-        if args.scene_image == "mirror":
+        if args.camera == "mirror":
             image2dname = [x for x in os.listdir(args.source_path) if ("_mirror" not in x) and (x[-3:] == 'png' )][0].split(".")[0]
 
             scene_info = sceneLoadTypeCallbacks["Mirror"](
                 args.source_path, image2dname, args.white_background, args.eval, args.distance, args.num_pts
             )
-        elif args.scene_image == "image":
+        elif args.camera == "one":
             image2dname = [x for x in os.listdir(args.source_path) if ("_mirror" not in x) and (x[-3:] == 'png' )][0].split(".")[0]
 
             scene_info = sceneLoadTypeCallbacks["Image"](

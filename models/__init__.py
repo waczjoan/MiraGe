@@ -12,45 +12,39 @@
 #
 
 from arguments import OptimizationParams
-from arguments_games import (
-    OptimizationParamsMesh,
-    OptimizationParamsFlame,
-)
-
 from scene.gaussian_model import GaussianModel
-from games.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
-from games.flat_splatting_3d_images.scene.flat_gaussian_model import FlatGaussianModel3DImage
-from games.flat_splatting_2d_images.scene.flat_gaussian_model import (
+from models.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
+from models.flat_splatting_3d_images.scene.flat_gaussian_model import FlatGaussianModel3DImage
+from models.flat_splatting_2d_images.scene.flat_gaussian_model import (
     FlatGaussianModel2DImage, FlatGaussianModel2D)
-from games.slices.scene.flat_gaussian_model import FlatGaussianModelSlices
+from models.slices.scene.flat_gaussian_model import FlatGaussianModelSlices
 
-from games.flat_splatting.scene.flat_gaussian_model import FlatGaussianModel
+from models.flat_splatting.scene.flat_gaussian_model import FlatGaussianModel
 
 optimizationParamTypeCallbacks = {
     "gs": OptimizationParams,
     "gs_flat": OptimizationParams,
     "gs_flat2D": OptimizationParams,
-    "gs_flat3d_image": OptimizationParams,
-    "gs_flat2d_image": OptimizationParams,
-    "gs_flat_slices": OptimizationParams,
+    "amorphous": OptimizationParams,
+    "2d": OptimizationParams,
+    "graphite": OptimizationParams,
 }
 
 gaussianModel = {
     "gs": GaussianModel,
     "gs_flat": FlatGaussianModel,
     "gs_flat2D": FlatGaussianModel2D,
-    "gs_flat3d_image": FlatGaussianModel3DImage,
-    "gs_flat2d_image": FlatGaussianModel2DImage,
-    "gs_flat_slices": FlatGaussianModelSlices,
+    "amorphous": FlatGaussianModel3DImage,
+    "2d": FlatGaussianModel2DImage,
+    "graphite": FlatGaussianModelSlices,
     "gs_points": PointsGaussianModel
 }
 
 gaussianModelRender = {
     "gs": GaussianModel,
     "gs_flat": FlatGaussianModel,
-    "gs_flat2D": FlatGaussianModel2D,
-    "gs_flat3d_image": FlatGaussianModel3DImage,
-    "gs_flat2d_image": FlatGaussianModel2DImage,
-    "gs_flat_slices": FlatGaussianModelSlices,
+    "2d": FlatGaussianModel2D,
+    "amorphous": FlatGaussianModel,
+    "graphite": FlatGaussianModel,
     "gs_points": PointsGaussianModel
 }

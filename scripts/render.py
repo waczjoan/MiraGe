@@ -19,7 +19,7 @@ import torchvision
 from utils.general_utils import safe_state
 from argparse import ArgumentParser
 from arguments import ModelParams, PipelineParams, get_combined_args
-from games import gaussianModelRender
+from models import gaussianModelRender
 
 
 def render_set(gs_type, model_path, name, iteration, views, gaussians, pipeline, background):
@@ -62,8 +62,8 @@ if __name__ == "__main__":
     model = ModelParams(parser, sentinel=True)
     pipeline = PipelineParams(parser)
     parser.add_argument("--iteration", default=-1, type=int)
-    parser.add_argument('--scene_image', type=str, default="")
-    parser.add_argument("--distance", type=float, default=5.0)
+    parser.add_argument('--camera', type=str, default="")
+    parser.add_argument("--distance", type=float, default=1.0)
     parser.add_argument("--num_pts", type=int, default=100_000)
     parser.add_argument("--skip_train", action="store_true")
     parser.add_argument("--skip_test", action="store_true")
@@ -72,7 +72,7 @@ if __name__ == "__main__":
 
     args = get_combined_args(parser)
     model.gs_type = args.gs_type
-    model.scene_image = args.scene_image
+    model.camera = args.camera
     model.distance = args.distance
     model.num_pts = args.num_pts
 
