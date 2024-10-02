@@ -209,7 +209,7 @@ To render user-driven modification use:
 python scripts/render_from_object.py  -m model_output_path --object_path object_path.obj
 ```
 
-We offer a pre-trained cat model, designed "for fun," along with a Blender (.blend) file. 
+We offer a pre-trained cat model [LINK](https://ujchmura-my.sharepoint.com/:f:/g/personal/joanna_waczynska_doctoral_uj_edu_pl/EmeuuK0PMzNJtXCFDglxGYwBISkbL-UyeVSQcfIwd-ASHA?e=RmSsYs), designed "for fun," along with a Blender (.blend) file. 
 This file applies a basic lattice modifier to generate the objects stored in the `output/sim_objects` directory. 
 Additionally, the triangle soup data for the cat is available in `output/pseudomesh_info`.
 
