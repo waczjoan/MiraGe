@@ -56,7 +56,7 @@ git clone https://github.com/waczjoan/MiraGe.git --recursive
 To install the required Python packages we used 3.8 python and conda v. 24.5.0
 ```shell
 conda env create --file environment.yml
-conda mirage
+conda activate mirage
 ```
 
 Common issues:
@@ -252,27 +252,36 @@ In `output/test/example_modification`:
 
 ### Amorphous 
 
-python scripts/train.py -s image_dir -m model_output_path --gs_type amorphous --camera mirror 
+```shell
+python train.py -s image_dir -m model_output_path --gs_type amorphous --camera mirror 
 
 python scripts/render.py -m model_output_path --camera mirror --distance 1 
 
 python metrics.py -m model_output_path
+```
 
 ------------------------------------
 ### 2D
-python scripts/train.py -s image_dir -m model_output_path --gs_type 2d --camera mirror
+
+```shell
+python train.py -s image_dir -m model_output_path --gs_type 2d --camera mirror
 
 python scripts/render.py -m model_output_path --camera mirror --distance 1  --gs_type 2d 
 
 python metrics.py -m model_output_path --gs_type 2d 
+```
 
 ------------------------------------
 ### Graphite
 
-python scripts/train.py -s image_dir -m model_output_path --gs_type graphite  --camera mirror
+```shell
+
+python train.py -s image_dir -m model_output_path --gs_type graphite  --camera mirror
 
 python scripts/render.py -m model_output_path --camera mirror
 
 python metrics.py -m model_output_path 
+```
+
 
 ------------------------------------
