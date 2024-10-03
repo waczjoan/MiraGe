@@ -18,6 +18,10 @@ quality and compression ratio similar to classical INR models
 but does not allow image modification. In contrast, our work introduces a novel method, MiraGe, which uses mirror reflections to perceive 2D images in 3D space and employs flat-controlled Gaussians for precise 2D image editing. Our approach improves the rendering quality and allows realistic image modifications, including human-inspired perception of photos in the 3D world. Thanks to modeling images in 3D space, we obtain the illusion of 3D-based modification in 2D images. We also show that our Gaussian representation can be easily combined with a physics engine to produce physics-based modification of 2D images. 
 Consequently, MiraGe allows for better quality than the standard approach and natural modification of 2D images.
 
+Project Page under the [LINK](https://waczjoan.github.io/MiraGe/).
+
+Paper: [LINK](https://arxiv.org/abs/2410.01521).
+
 </br>
 <img src="./docs/gifs/blanket.gif" height="250" />
 </br>
@@ -285,3 +289,33 @@ python metrics.py -m model_output_path
 
 
 ------------------------------------
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+If you find our work useful, please consider citing:
+<h3 class="title">MiraGe: Editable 2D Images using Gaussian Splatting</h3>
+    <pre><code>@Article{waczynska2024mirage,
+      author         = {Joanna Waczyńska and Tomasz Szczepanik and Piotr Borycki and Sławomir Tadeja and Thomas Bohné and Przemysław Spurek},
+      title          = {MiraGe: Editable 2D Images using Gaussian Splatting}, 
+      year           = {2024},
+      eprint         = {2410.01521},
+      archivePrefix  = {arXiv},
+      primaryClass   = {cs.CV}
+}
+</code></pre>
+    <h3 class="title">Gaussian Splatting</h3>
+    <pre><code>@Article{kerbl3Dgaussians,
+      author         = {Kerbl, Bernhard and Kopanas, Georgios and Leimk{\"u}hler, Thomas and Drettakis, George},
+      title          = {3D Gaussian Splatting for Real-Time Radiance Field Rendering},
+      journal        = {ACM Transactions on Graphics},
+      number         = {4},
+      volume         = {42},
+      month          = {July},
+      year           = {2023},
+      url            = {https://repo-sam.inria.fr/fungraph/3d-gaussian-splatting/}
+}</code></pre>
+
+</div>
+
+</section>
