@@ -208,6 +208,8 @@ If you create more objects (for example simulation), you to render please use:
 ```shell
 python scripts/render_simulation.py  -m model_output_path --simulation_path simulation_path --save_trajectory
 ```
+Example simulation script is included in simulations directory. It requires taichi_elements to be installed using for example:
+pip install git+https://github.com/taichi-dev/taichi_elements
 
 To render user-driven modification use: 
 
