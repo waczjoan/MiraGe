@@ -15,4 +15,4 @@ python metrics.py -m $MODEL_DIR --gs_type $type
 SIM="$MODEL_DIR/simulation"
 python scripts/save_pseudomesh.py --model_path $MODEL_DIR
 python simulations/apple.py -i "$MODEL_DIR/pseudomesh_info/ours_$ITER" -o $SIM
-python scripts/render_simulation.py --model_path $MODEL_DIR --simulation_path $SIM --save_trajectory
+python scripts/render_simulation.py --model_path $MODEL_DIR --simulation_path $SIM --save_trajectory --scale 1
