@@ -24,7 +24,6 @@ from argparse import ArgumentParser
 from arguments import ModelParams, PipelineParams, get_combined_args
 from models.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
 import numpy as np
-import trimesh
 import matplotlib.pyplot as plt
 
 def find_xy_from_3d_to_out_img(view, triangles):
@@ -60,20 +59,17 @@ def render_set(
     triangles = torch.stack([v1, v2, v3], dim=1)
 
     for idx, view in enumerate(tqdm(views, desc="Rendering progress")):
-
-        objpath = f"{simulation_path}"
-        lst = os.listdir(f"{objpath}")  # your directory path
-        lst = [x for x in lst if "obj" in x]
+        triangles_path = f"{simulation_path}/triangles"
+        lst = os.listdir(triangles_path)  # your directory path
+        lst = [x for x in lst]
         lst.sort()
 
         if save_trajectory:
-            objpathfile_last = f'{objpath}/{lst[-1]}'
-            mesh_scene = trimesh.load(objpathfile_last, force='mesh')
-            last_triangles = torch.tensor(mesh_scene.triangles).cuda().float()
+            objpathfile_last = f'{triangles_path}/{lst[-1]}'
+            last_triangles = torch.load(objpathfile_last).cuda().float()
 
-            objpathfile_fist = f'{objpath}/{lst[0]}'
-            mesh_scene_fist = trimesh.load(objpathfile_fist, force='mesh')
-            first_triangles = torch.tensor(mesh_scene_fist.triangles).cuda().float()
+            objpathfile_first = f'{triangles_path}/{lst[0]}'
+            first_triangles = torch.load(objpathfile_first).cuda().float()
 
             diff = first_triangles - last_triangles
             diff_sum = torch.abs(diff.sum(dim=2).sum(dim=1))
@@ -87,10 +83,10 @@ def render_set(
                 }
 
         for object_file in lst:
-                objpathfile = f'{objpath}/{object_file}'
+                objpathfile = f'{triangles_path}/{object_file}'
 
-                mesh_scene = trimesh.load(objpathfile, force='mesh')
-                new_triangles = torch.tensor(mesh_scene.triangles).cuda().float() / scale
+                new_triangles = torch.load(objpathfile).cuda().float() / scale
+                new_triangles = torch.cat([new_triangles, torch.zeros(new_triangles.shape[0], 3, 1).cuda().float()], dim=-1)[..., [0, 2, 1]]
 
                 rendering = render(new_triangles, view, gaussians, pipeline, background)["render"]
                 torchvision.utils.save_image(rendering, os.path.join(render_path, '{0:05d}'.format(idx) + f"{object_file.split('.')[0]}.png"))
@@ -125,7 +121,7 @@ def render_sets(
         background = torch.tensor(bg_color, dtype=torch.float32, device="cuda")
 
         if simulation_path == "":
-            simulation_path = f"{dataset.model_path}/sim_objects"
+            simulation_path = f"{dataset.model_path}/triangles"
 
         if not skip_train:
              render_set(

@@ -76,7 +76,7 @@ Under the  [LINK](https://ujchmura-my.sharepoint.com/:f:/g/personal/joanna_waczy
 
 # Tutorial
 
-1. Example 2D image illustrated cat (`example.png`) put to folder: 
+### 1. Example 2D image illustrated cat (`example.png`) put to folder: 
 
 ```
 <MiraGe>
@@ -88,7 +88,7 @@ Under the  [LINK](https://ujchmura-my.sharepoint.com/:f:/g/personal/joanna_waczy
 |---...
 ```
 
-2. Train MiraGe.
+### 2. Train MiraGe.
 
 We conducted an extensive analysis of the MiraGe model due to its unique ability to control the
 behavior of Gaussians. Three distinct settings for Gaussian movement were explored.
@@ -134,7 +134,7 @@ If you `mirror` camera, in `image_dir` you will find `{image_name}_mirror.png`. 
 |---...
 ```
 
-4. Evaluation:
+### 3. Evaluation:
 
 Firstly let's check you we can render Flat Gaussian Splatting:
 ```shell
@@ -171,7 +171,7 @@ you should get:
 <img src="./docs/cat_output_images/renders_gs_flat/00000.png" height="250"/>
 </p>
 
-5. Modification:
+### 4. Modification:
 
 Simply run:
 ```shell
@@ -193,7 +193,7 @@ Please find renders in `renders_transform` directory:
 |---...
 ```
 
-6. User modification:
+#### User modification:
 
 First save pseudomesh (triangle soup):
 
@@ -208,13 +208,14 @@ If you create more objects (for example simulation), you to render please use:
 ```shell
 python scripts/render_simulation.py  -m model_output_path --simulation_path simulation_path --save_trajectory
 ```
-
 To render user-driven modification use: 
 
 ```shell
 python scripts/render_from_object.py  -m model_output_path --object_path object_path.obj
 ```
 
+
+#### Blender modification:
 We offer a pre-trained cat model [LINK](https://ujchmura-my.sharepoint.com/:f:/g/personal/joanna_waczynska_doctoral_uj_edu_pl/EmeuuK0PMzNJtXCFDglxGYwBISkbL-UyeVSQcfIwd-ASHA?e=RmSsYs), designed "for fun," along with a Blender (.blend) file. 
 This file applies a basic lattice modifier to generate the objects stored in the `output/sim_objects` directory. 
 Additionally, the triangle soup data for the cat is available in `output/pseudomesh_info`.
@@ -250,6 +251,27 @@ python scripts/render_from_object.py -m output/cat_mirage --object_path output/o
 In `output/test/example_modification`:
 <p>
 <img src="./docs/cat_output_images/example_modification/00000.png" height="250"/>
+</p>
+
+#### taichi_elements simulation
+
+Under the [LINK](https://ujchmura-my.sharepoint.com/:f:/g/personal/joanna_waczynska_doctoral_uj_edu_pl/EmeuuK0PMzNJtXCFDglxGYwBISkbL-UyeVSQcfIwd-ASHA?e=RmSsYs) please find `apple` image. Put image in `data/apple`
+
+<p>
+<img src="./docs/apple/resized.png" height="250"/>
+</p>
+
+Example simulation script is included in `simulations` directory. It requires taichi_elements to be installed using for example:
+```shell
+pip install git+https://github.com/taichi-dev/taichi_elements`
+```
+
+Script `simulations\run_sim.sh` used pre-trained model, but you can train it your own.
+
+PS Taichi_elements: There should be 100 dots line printed to finish your experiment. In `output/apple/simulation/` you can find each simulation step.
+Since we save every thing/image/simulation step it takes a bit longer. You can easily cut the time, when you dig in to code. USing RTX2080, train, simulation, rendering should take less than 15 minutes together. 
+<p>
+<img src="./docs/apple/compressed.gif" height="250"/>
 </p>
 
 # In nutshell:
