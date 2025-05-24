@@ -73,6 +73,22 @@ Feel free. You can choose whatever 2D image you want (`.png`).
 
 Under the  [LINK](https://ujchmura-my.sharepoint.com/:f:/g/personal/joanna_waczynska_doctoral_uj_edu_pl/EmeuuK0PMzNJtXCFDglxGYwBISkbL-UyeVSQcfIwd-ASHA?e=RmSsYs) please find pre-trained model and cat image (there is already flipped cat image in `data/cat`).
 
+# spz
+
+`.spz` is a file format for compressed 3D gaussian splats created by Niantic Labs. The original repository can be found at [LINK](https://github.com/nianticlabs/spz). The original repository doesn't provide CLI tools, so below you can find the instructions to build a CLI tool using our fork:
+
+```shell
+git clone git@github.com:piotr310100/spz.git
+cd spz
+mkdir build && cd build
+cmake ..
+make
+cd ../..
+mv spz/build/gaussian_converter gaussian_converter
+rm -rf spz # if you want to remove the spz directory
+```
+
+It requires at least CMake 3.10 and creates an executable which allows the user to convert `.ply->.spz` as well as `.spz->.ply`. It can be used as `./gaussian_converter <format> <input_file> <output_file>`, where format is one of the `ply_to_spz` or `spz_to_ply`.
 
 # Tutorial
 
